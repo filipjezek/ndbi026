@@ -63,13 +63,6 @@ CREATE TABLE teachers
   id INT PRIMARY KEY REFERENCES people(id) ON DELETE CASCADE,
   salary INT NOT NULL CHECK (salary > 0)
 );
-CREATE TABLE teachers_degrees
-(
-  id INT PRIMARY KEY IDENTITY,
-  teacher INT NOT NULL REFERENCES teachers(id) ON DELETE CASCADE,
-  degree NVARCHAR(10) NOT NULL,
-  UNIQUE(teacher, degree)
-);
 CREATE TABLE teachers_subjects
 (
   id INT PRIMARY KEY IDENTITY,

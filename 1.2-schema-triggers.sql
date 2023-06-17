@@ -6,11 +6,27 @@ CREATE TRIGGER student_subject_programme ON students_subjects AFTER INSERT, UPDA
     SELECT *
     FROM inserted i
       JOIN students_programmes sp ON i.student = sp.student
-      JOIN subject_instances s ON i.subject = s.id
-    WHERE YEAR(sp.since) > s.year OR sp.[to] IS NOT NULL OR YEAR(sp.[to]) < s.year
+      JOIN subject_instances si ON i.subject = si.id
+    WHERE YEAR(sp.since) > si.year OR sp.[to] IS NOT NULL OR YEAR(sp.[to]) < si.year
   )) BEGIN
     ROLLBACK TRANSACTION;
     THROW 60000, 'Student must be enrolled in a programme while attending a subject instance', 0;
+  END;
+END;
+GO
+
+-- students must not attend a subject which they already completed
+CREATE TRIGGER student_subject_multiple ON students_subjects AFTER INSERT, UPDATE AS BEGIN
+  IF (EXISTS(
+    SELECT *
+    FROM inserted i
+      JOIN subject_instances si ON i.subject = si.id
+      JOIN subject_instances si2 ON si.id != si2.id AND si.instanceof = si2.instanceof
+      JOIN students_subjects ss ON si2.id = ss.subject
+    WHERE ss.grade IN (1, 2, 3)
+  )) BEGIN
+    ROLLBACK TRANSACTION;
+    THROW 60005, 'Student cannot attend any already completed subject', 0;
   END;
 END;
 GO

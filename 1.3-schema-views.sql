@@ -34,6 +34,7 @@ GO
 CREATE VIEW VW_student_programme AS
   SELECT
     sp.student,
+    p.id AS programme_id,
     p.name AS programme,
     s.name AS subject,
     CASE
@@ -51,7 +52,7 @@ CREATE VIEW VW_student_programme AS
         JOIN students_subjects ss ON si.id = ss.subject
     ) stud_results ON stud_results.instanceof = s.id AND
       stud_results.student = sp.student
-  GROUP BY sp.student, sp.programme, s.id,
+  GROUP BY sp.student, s.id, p.id,
     p.name, s.name;
 GO
 

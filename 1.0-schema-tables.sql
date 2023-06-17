@@ -8,20 +8,32 @@ CREATE TABLE programmes
 CREATE TABLE subjects
 (
   id INT PRIMARY KEY IDENTITY,
-  name NVARCHAR(100) NOT NULL
+  name NVARCHAR(100) NOT NULL,
+  credits INT NOT NULL CHECK (credits > 0)
 );
 CREATE TABLE subject_instances
 (
   id INT PRIMARY KEY IDENTITY,
   year INT NOT NULL,
+  capacity INT CHECK (capacity IS NULL OR CAPACITY > 0),
   instanceof INT NOT NULL REFERENCES subjects(id) ON DELETE CASCADE
 );
+CREATE TABLE programme_required
+(
+  id INT PRIMARY KEY IDENTITY,
+  subject INT NOT NULL REFERENCES subjects(id) ON DELETE CASCADE,
+  programme INT NOT NULL REFERENCES programmes(id) ON DELETE CASCADE,
+  UNIQUE(subject, programme)
+)
 
 CREATE TABLE people
 (
   id INT PRIMARY KEY IDENTITY,
   name NVARCHAR(100) NOT NULL,
-  birth_date DATE NOT NULL
+  birth_date DATE NOT NULL,
+  city NVARCHAR(100),
+  street NVARCHAR(100),
+  postal_code CHAR(5),
 );
 
 CREATE TABLE students
@@ -42,6 +54,7 @@ CREATE TABLE students_subjects
   id INT PRIMARY KEY IDENTITY,
   subject INT NOT NULL REFERENCES subject_instances(id) ON DELETE CASCADE,
   student INT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+  grade SMALLINT CHECK (grade IS NULL OR (grade > 0 AND grade < 5)),
   UNIQUE(student, subject)
 );
 

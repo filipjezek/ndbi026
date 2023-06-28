@@ -1,5 +1,20 @@
 -- author: Filip Ježek (44432378)
 
+/*
+Specification:
+
+Student Information System
+--------------------------
+
+SIS is a system for university students and employees. It is possible to enroll in various subjects and programmes,
+as well as create them and even graduate.
+
+Please see the provided ER diagram for explanation of the semantic schema.
+
+Procedures and views are explained (if neccessary) in their respective files.
+
+*/
+
 CREATE TABLE programmes
 (
   id INT PRIMARY KEY IDENTITY,

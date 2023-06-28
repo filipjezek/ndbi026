@@ -80,6 +80,8 @@ CREATE VIEW VW_available_programmes AS
 GO
 
 -- how many students choose this teacher
+-- chosen = students studying his instances of a specific subject this year
+-- total = students studying all instances of a specific subject this year
 CREATE VIEW VW_teacher_popularity AS
   WITH tss (teacher, subject, student)
   AS (

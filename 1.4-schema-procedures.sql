@@ -9,7 +9,7 @@ AS
     BEGIN TRY
       IF (NOT EXISTS(
         SELECT * FROM VW_subject_enrollment
-        WHERE id = @id_instance AND enrolled < capacity
+        WHERE id = @id_instance AND (capacity IS NULL OR enrolled < capacity)
       )) THROW 60002, 'Subject instance does not exist in the current year or is full', 0;
 
       IF (NOT EXISTS(SELECT * FROM students WHERE id = @id_student))
@@ -18,7 +18,8 @@ AS
       INSERT INTO students_subjects (student, subject) VALUES (@id_student, @id_instance);
     END TRY
     BEGIN CATCH
-      ROLLBACK TRANSACTION;
+      IF (@@TRANCOUNT > 0)
+        ROLLBACK TRANSACTION;
       THROW;
     END CATCH
   COMMIT;
@@ -31,8 +32,8 @@ CREATE PROCEDURE drop_subject
 AS
   IF (NOT EXISTS(
     SELECT * FROM students_subjects
-    WHERE student = @id_student AND subject = @id_instance
-  )) THROW 60004, 'Student is not enrolled in this subject instance', 0;
+    WHERE student = @id_student AND subject = @id_instance AND grade IS NULL
+  )) THROW 60004, 'Student is not enrolled in this subject instance or he completed the subject instance', 0;
 
   DELETE FROM students_subjects WHERE student = @id_student AND subject = @id_instance;
 GO
@@ -92,7 +93,8 @@ AS
       VALUES (@id_student, @id_programme, GETDATE(), NULL);
     END TRY
     BEGIN CATCH
-      ROLLBACK TRANSACTION;
+      IF (@@TRANCOUNT > 0)
+        ROLLBACK TRANSACTION;
       THROW;
     END CATCH
   COMMIT;
@@ -116,7 +118,8 @@ AS
       WHERE programme = @id_programme AND student = @id_student AND [to] IS NULL;
     END TRY
     BEGIN CATCH
-      ROLLBACK TRANSACTION;
+      IF (@@TRANCOUNT > 0)
+        ROLLBACK TRANSACTION;
       THROW;
     END CATCH
   COMMIT;
@@ -153,7 +156,8 @@ AS
       INSERT INTO students (id) VALUES (@id_student);
     END TRY
     BEGIN CATCH
-      ROLLBACK TRANSACTION;
+      IF (@@TRANCOUNT > 0)
+        ROLLBACK TRANSACTION;
       THROW;
     END CATCH
   COMMIT;
@@ -178,7 +182,8 @@ AS
       INSERT INTO teachers (id, salary) VALUES (@id_teacher, @salary);
     END TRY
     BEGIN CATCH
-      ROLLBACK TRANSACTION;
+      IF (@@TRANCOUNT > 0)
+        ROLLBACK TRANSACTION;
       THROW;
     END CATCH
   COMMIT;
@@ -205,7 +210,8 @@ AS
       INSERT INTO teachers_subjects (teacher, subject) VALUES (@id_teacher, @id_instance);
     END TRY
     BEGIN CATCH
-      ROLLBACK TRANSACTION;
+      IF (@@TRANCOUNT > 0)
+        ROLLBACK TRANSACTION;
       THROW;
     END CATCH
   COMMIT;

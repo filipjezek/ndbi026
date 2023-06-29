@@ -26,8 +26,9 @@ CREATE TRIGGER student_subject_multiple ON students_subjects AFTER INSERT, UPDAT
     JOIN subject_instances si ON i.subject = si.id
     JOIN subject_instances si2 ON si.id != si2.id AND si.instanceof = si2.instanceof
     JOIN students_subjects ss ON si2.id = ss.subject AND ss.student = i.student
-  WHERE (si2.year <= si.year AND ss.grade IN (1, 2, 3))
-    OR (si.year <= si2.year AND i.grade IN (1, 2, 3))
+  WHERE (si2.year < si.year AND ss.grade IN (1, 2, 3))
+    OR (si.year < si2.year AND i.grade IN (1, 2, 3))
+    OR (si.year = si2.year AND i.grade IN (1, 2, 3) AND ss.grade IN (1, 2, 3))
   )) BEGIN
     ROLLBACK TRANSACTION;
     THROW 60005, 'Student cannot attend any already completed subject', 0;

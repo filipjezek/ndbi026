@@ -62,7 +62,7 @@ CREATE TABLE students_programmes
   programme INT NOT NULL REFERENCES programmes(id),
   since DATE NOT NULL,
   [to] DATE,
-  CHECK ([to] IS NULL OR since < [to])
+  CHECK ([to] IS NULL OR since <= [to])
 );
 CREATE TABLE students_subjects
 (

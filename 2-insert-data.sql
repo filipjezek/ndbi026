@@ -11,8 +11,6 @@ DELETE FROM subject_instances;
 DELETE FROM subjects;
 DELETE FROM programmes;
 
-SET IDENTITY_INSERT students_subjects OFF;
-
 SET IDENTITY_INSERT programmes ON;
 INSERT INTO programmes
   (id, name)

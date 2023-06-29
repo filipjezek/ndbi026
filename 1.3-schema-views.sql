@@ -38,7 +38,7 @@ CREATE VIEW VW_student_programme AS
     p.name AS programme,
     s.name AS subject,
     CASE
-      WHEN MIN(stud_results.grade) NOT IN (NULL, 4) THEN 1
+      WHEN MIN(COALESCE(stud_results.grade, 4)) < 4 THEN 1
       ELSE 0
     END AS passed
   FROM

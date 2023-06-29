@@ -102,7 +102,7 @@ WHERE student = @stud;
 -- enroll in another instance of MA2 and complete it
 EXECUTE enroll_subject @stud, 22;
 EXECUTE finish_subject @stud, 22, 3;
-SELECT can_graduate(@stud, @pid);
+-- SELECT dbo.can_graduate(@stud, @pid);
 SELECT *
 FROM VW_student_programme
 WHERE student = @stud;

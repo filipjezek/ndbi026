@@ -16,7 +16,9 @@ GO
 CREATE VIEW VW_timetable AS
   SELECT
     ss.student,
+    stud.personal_number AS student_personal_number,
     s.id AS subject_id,
+    s.code AS subject_code,
     s.name AS subject,
     t.name AS teacher,
     t.id AS teacher_id
@@ -26,6 +28,7 @@ CREATE VIEW VW_timetable AS
     JOIN students_subjects ss ON ss.subject = si.id
     JOIN teachers_subjects ts ON ts.subject = si.id
     JOIN people t ON ts.teacher = t.id
+    JOIN people stud ON ss.student = stud.id
   WHERE
   si.year = YEAR(GETDATE());
 GO
@@ -36,6 +39,7 @@ CREATE VIEW VW_student_programme AS
     sp.student,
     p.id AS programme_id,
     p.name AS programme,
+    p.code,
     s.name AS subject,
     CASE
       WHEN MIN(COALESCE(stud_results.grade, 4)) < 4 THEN 1
@@ -53,22 +57,22 @@ CREATE VIEW VW_student_programme AS
     ) stud_results ON stud_results.instanceof = s.id AND
       stud_results.student = sp.student
   GROUP BY sp.student, s.id, p.id,
-    p.name, s.name;
+    p.name, p.code, s.name;
 GO
 
 -- subjects and their availability for enrollment
 CREATE VIEW VW_subject_enrollment AS
-  SELECT si.id, si.capacity, s.name, COUNT(ss.id) AS enrolled
+  SELECT si.id, si.capacity, s.name, s.code, COUNT(ss.id) AS enrolled
   FROM subject_instances si
     JOIN subjects s ON si.instanceof = s.id
     LEFT JOIN students_subjects ss ON si.id = ss.subject
   WHERE si.year = YEAR(GETDATE())
-  GROUP BY si.id, si.capacity, s.name;
+  GROUP BY si.id, si.capacity, s.name, s.code;
 GO
 
 -- listing of programmes that can be studied this year
 CREATE VIEW VW_available_programmes AS
-  SELECT p.id, p.name, s.name AS subject
+  SELECT p.id, p.name, p.code, s.name AS subject
   FROM programmes p
     JOIN programme_required pr ON p.id = pr.programme
     JOIN subjects s ON pr.subject = s.id
@@ -91,7 +95,7 @@ CREATE VIEW VW_teacher_popularity AS
       JOIN subjects s ON si.instanceof = s.id
       JOIN students_subjects ss ON ss.subject = si.id
   )
-  SELECT t.id, t.name,
+  SELECT t.id, t.name, t.personal_number,
     (SELECT COUNT(*) FROM tss WHERE teacher = t.id) AS chosen,
     (SELECT COUNT(*) FROM tss WHERE tss.subject IN (
       SELECT subject FROM tss WHERE tss.teacher = t.id
@@ -101,11 +105,11 @@ GO
 
 -- teacher's salary and how many subject instances he teaches
 CREATE VIEW VW_teacher_utilization AS
-  SELECT t.id, t.name, t.salary, COUNT(si.id) AS subjects
+  SELECT t.id, t.personal_number, t.name, t.salary, COUNT(si.id) AS subjects
   FROM VW_teachers t
     LEFT JOIN teachers_subjects ts ON ts.teacher = t.id
     JOIN subject_instances si ON ts.subject = si.id
   WHERE si.year = YEAR(GETDATE())
-  GROUP BY t.id, t.name, t.salary;
+  GROUP BY t.id, t.name, t.personal_number, t.salary;
 GO
 

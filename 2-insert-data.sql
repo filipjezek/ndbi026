@@ -13,63 +13,63 @@ DELETE FROM programmes;
 
 SET IDENTITY_INSERT programmes ON;
 INSERT INTO programmes
-  (id, name)
+  (id, code, name)
 VALUES
-  (1, 'Database and web'),
-  (2, 'Programming and software development'),
-  (3, 'Computer vision');
+  (1, 'AAAA', 'Database and web'),
+  (2, 'BBBB', 'Programming and software development'),
+  (3, 'CCCC', 'Computer vision');
 SET IDENTITY_INSERT programmes OFF;
 
 SET IDENTITY_INSERT subjects ON;
 INSERT INTO subjects
-  (id, name, credits)
+  (id, code, name, credits)
 VALUES
-  (1, 'Modern database systems', 4),
-  (2, 'Data formats', 5),
-  (3, 'Web services', 5),
+  (1, 'AAAA', 'Modern database systems', 4),
+  (2, 'BBBB', 'Data formats', 5),
+  (3, 'CCCC', 'Web services', 5),
 
-  (4, 'Software system architectures', 5),
-  (5, 'Software developments tools', 2),
-  (6, 'Programming in C#', 3),
+  (4, 'DDDD', 'Software system architectures', 5),
+  (5, 'EEEE', 'Software developments tools', 2),
+  (6, 'FFFF', 'Programming in C#', 3),
 
-  (7, 'Mathematical analysis 2', 5),
-  (8, 'Introduction to colour science', 3),
-  (9, 'Video retrieval', 5);
+  (7, 'GGGG', 'Mathematical analysis 2', 5),
+  (8, 'HHHH', 'Introduction to colour science', 3),
+  (9, 'IIII', 'Video retrieval', 5);
 SET IDENTITY_INSERT subjects OFF;
 
 SET IDENTITY_INSERT subject_instances ON;
 INSERT INTO subject_instances
-  (id, year, capacity, instanceof)
+  (id, code,  year, capacity, instanceof)
 VALUES
-  (1, 2023, 60, 1),
-  (2, 2023, NULL, 1),
-  (3, 2023, 50, 2),
-  (4, 2023, 80, 2),
-  (5, 2022, 10, 2),
-  (6, 2022, 60, 2),
-  (7, 2023, NULL, 3),
-  (8, 2022, 50, 3),
-  (9, 2022, 70, 3),
-  (10, 2023, 30, 4),
-  (11, 2022, 60, 4),
-  (12, 2022, 50, 4),
-  (13, 2023, 10, 5),
-  (14, 2022, 80, 5),
-  (15, 2022, NULL, 5),
-  (16, 2022, 40, 5),
-  (17, 2022, 60, 6),
-  (18, 2023, 10, 6),
-  (19, 2023, NULL, 6),
-  (20, 2022, 60, 7),
-  (21, 2022, 30, 7),
-  (22, 2023, 50, 7),
-  (23, 2023, 60, 7),
-  (24, 2022, 40, 8),
-  (25, 2023, 50, 8),
-  (26, 2023, 50, 9),
-  (27, 2023, NULL, 9),
-  (28, 2023, 10, 9),
-  (29, 2023, 20, 9);
+  (1, 'AAAAAA', 2023, 60, 1),
+  (2, 'BBBBBB', 2023, NULL, 1),
+  (3, 'CCCCCC', 2023, 50, 2),
+  (4, 'DDDDDD', 2023, 80, 2),
+  (5, 'EEEEEE', 2022, 10, 2),
+  (6, 'FFFFFF', 2022, 60, 2),
+  (7, 'GGGGGG', 2023, NULL, 3),
+  (8, 'HHHHHH', 2022, 50, 3),
+  (9, 'IIIIII', 2022, 70, 3),
+  (10, 'JJJJJJ', 2023, 30, 4),
+  (11, 'KKKKKK', 2022, 60, 4),
+  (12, 'LLLLLL', 2022, 50, 4),
+  (13, 'MMMMMM', 2023, 10, 5),
+  (14, 'NNNNNN', 2022, 80, 5),
+  (15, 'OOOOOO', 2022, NULL, 5),
+  (16, 'PPPPPP', 2022, 40, 5),
+  (17, 'QQQQQQ', 2022, 60, 6),
+  (18, 'RRRRRR', 2023, 10, 6),
+  (19, 'SSSSSS', 2023, NULL, 6),
+  (20, 'TTTTTT', 2022, 60, 7),
+  (21, 'UUUUUU', 2022, 30, 7),
+  (22, 'VVVVVV', 2023, 50, 7),
+  (23, 'WWWWWW', 2023, 60, 7),
+  (24, 'XXXXXX', 2022, 40, 8),
+  (25, 'YYYYYY', 2023, 50, 8),
+  (26, 'ZZZZZZ', 2023, 50, 9),
+  (27, 'AAAAAB', 2023, NULL, 9),
+  (28, 'BBBBBC', 2023, 10, 9),
+  (29, 'CCCCCD', 2023, 20, 9);
 SET IDENTITY_INSERT subject_instances OFF;
 
 SET IDENTITY_INSERT programme_required ON;
@@ -89,28 +89,28 @@ SET IDENTITY_INSERT programme_required OFF;
 
 SET IDENTITY_INSERT people ON;
 INSERT INTO people
-  (id, name, birth_date, city, street, postal_code)
+  (id, personal_number, name, birth_date, city, street, postal_code)
 VALUES
-  (1, 'Carlota Elloit', '1989-05-04', 'Shin’ichi', '35 Melvin Road', 47112),
-  (2, 'Ansell Vampouille', '1979-11-10', 'Moppo', '9 Maywood Junction', 96772),
-  (3, 'Horacio Dryden', '1980-09-27', 'Venlo', '9 Stang Drive', 65226),
-  (4, 'Bartholomeus Feld', '2000-11-15', 'Lakkíon', '104 Southridge Terrace', 20972),
-  (5, 'Christoffer Cocke', '1998-08-15', 'Paraná', '89 Burrows Circle', 19209),
-  (6, 'Pamelina Bartali', '1991-12-27', 'Itapé', '45706 Helena Avenue', 88198),
-  (7, 'Shalna Harbidge', '1987-11-16', 'Springfield', '20 Gateway Trail', 16093),
-  (8, 'Reeba Mowsdill', '1980-11-19', 'Komysh-Zorya', '85 Golf Court', 67300),
-  (9, 'Brannon Kelley', '1971-07-04', 'Lieksa', '2948 School Plaza', 16073),
-  (10, 'Kelbee Iacovolo', '1989-06-02', 'Wugong', '9859 Onsgard Place', 36082),
-  (11, 'Asia Zarb', '1982-09-21', 'Ad Dujayl', '7941 Lerdahl Point', 36402),
-  (12, 'Cosmo Kenen', '1977-04-19', 'Telouet', '1 Surrey Avenue', 40068),
-  (13, 'Bar Bispham', '1972-06-14', 'Poddębice', '016 Fremont Place', 88984),
-  (14, 'Humfried Hegley', '1976-09-20', 'Bazha', '0 Lotheville Way', 64387),
-  (15, 'Evangelia Palle', '1975-11-23', 'Szubin', '530 Cordelia Junction', 21133),
-  (16, 'Craig Hatz', '1981-10-27', 'Sagarejo', '75723 Larry Plaza', 29315),
-  (17, 'Nani Frigout', '1987-07-07', 'Pangligaran', '053 Dwight Street', 22155),
-  (18, 'Bryant Vannah', '1980-12-05', 'Anju', '0963 Holy Cross Plaza', 32570),
-  (19, 'Chlo Huston', '1998-11-25', 'Luhanka', '80 Lakewood Gardens Drive', 82185),
-  (20, 'Lynnell Bleibaum', '1990-03-13', 'Qiangqinxue', '8 Daystar Plaza', 28612);
+  (1, '0000000001', 'Carlota Elloit', '1989-05-04', 'Shin’ichi', '35 Melvin Road', 47112),
+  (2, '0000000002', 'Ansell Vampouille', '1979-11-10', 'Moppo', '9 Maywood Junction', 96772),
+  (3, '0000000003', 'Horacio Dryden', '1980-09-27', 'Venlo', '9 Stang Drive', 65226),
+  (4, '0000000004', 'Bartholomeus Feld', '2000-11-15', 'Lakkíon', '104 Southridge Terrace', 20972),
+  (5, '0000000005', 'Christoffer Cocke', '1998-08-15', 'Paraná', '89 Burrows Circle', 19209),
+  (6, '0000000006', 'Pamelina Bartali', '1991-12-27', 'Itapé', '45706 Helena Avenue', 88198),
+  (7, '0000000007', 'Shalna Harbidge', '1987-11-16', 'Springfield', '20 Gateway Trail', 16093),
+  (8, '0000000008', 'Reeba Mowsdill', '1980-11-19', 'Komysh-Zorya', '85 Golf Court', 67300),
+  (9, '0000000009', 'Brannon Kelley', '1971-07-04', 'Lieksa', '2948 School Plaza', 16073),
+  (10, '0000000010', 'Kelbee Iacovolo', '1989-06-02', 'Wugong', '9859 Onsgard Place', 36082),
+  (11, '0000000011', 'Asia Zarb', '1982-09-21', 'Ad Dujayl', '7941 Lerdahl Point', 36402),
+  (12, '0000000012', 'Cosmo Kenen', '1977-04-19', 'Telouet', '1 Surrey Avenue', 40068),
+  (13, '0000000013', 'Bar Bispham', '1972-06-14', 'Poddębice', '016 Fremont Place', 88984),
+  (14, '0000000014', 'Humfried Hegley', '1976-09-20', 'Bazha', '0 Lotheville Way', 64387),
+  (15, '0000000015', 'Evangelia Palle', '1975-11-23', 'Szubin', '530 Cordelia Junction', 21133),
+  (16, '0000000016', 'Craig Hatz', '1981-10-27', 'Sagarejo', '75723 Larry Plaza', 29315),
+  (17, '0000000017', 'Nani Frigout', '1987-07-07', 'Pangligaran', '053 Dwight Street', 22155),
+  (18, '0000000018', 'Bryant Vannah', '1980-12-05', 'Anju', '0963 Holy Cross Plaza', 32570),
+  (19, '0000000019', 'Chlo Huston', '1998-11-25', 'Luhanka', '80 Lakewood Gardens Drive', 82185),
+  (20, '0000000020', 'Lynnell Bleibaum', '1990-03-13', 'Qiangqinxue', '8 Daystar Plaza', 28612);
 SET IDENTITY_INSERT people OFF;
 
 INSERT INTO students

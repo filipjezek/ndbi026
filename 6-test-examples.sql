@@ -5,7 +5,7 @@
 
 -- create a new study programme
 DECLARE @pid INT = NULL;
-EXECUTE create_programme 'Artificial intelligence', @pid OUTPUT;
+EXECUTE create_programme 'Artificial intelligence', 'ArIn', @pid OUTPUT;
 
 -- add some required subjects
 DECLARE @sid INT = NULL;
@@ -21,9 +21,9 @@ EXECUTE add_required_subject @pid, @sid;
 
 -- create a new subject and add it too
 INSERT INTO subjects
-  (name, credits)
+  (name, code, credits)
 VALUES
-  ('Machine learning for beginners', 5);
+  ('Machine learning for beginners', 'MLFB', 5);
 SELECT @sid = SCOPE_IDENTITY();
 EXECUTE add_required_subject @pid, @sid;
 
@@ -33,15 +33,15 @@ SELECT *
 FROM VW_available_programmes;
 
 -- create instances for the new subject
--- (teacher, subject, capacity, OUT id)
+-- (teacher, subject, capacity, code, OUT id)
 DECLARE @iid INT = NULL;
-EXECUTE create_subject_instance 17, @sid, 30, @iid OUTPUT;
-EXECUTE create_subject_instance 18, @sid, NULL, @iid OUTPUT;
+EXECUTE create_subject_instance 17, @sid, 30, 'TSIAAA', @iid OUTPUT;
+EXECUTE create_subject_instance 18, @sid, NULL, 'TSIBBB', @iid OUTPUT;
 
 -- add another teacher to teach the second instance
 DECLARE @tid INT = NULL;
--- (salary, name, birth_date, city, street, postal_code, OUT id)
-EXECUTE add_teacher 39000, 'Tomáš Příklep', '1978-09-09', 'Prague', 'Třešňová 52', 11400, @tid OUTPUT;
+-- (personal_number, salary, name, birth_date, city, street, postal_code, OUT id)
+EXECUTE add_teacher '1000000000', 39000, 'Tomáš Příklep', '1978-09-09', 'Prague', 'Třešňová 52', 11400, @tid OUTPUT;
 -- see him among teachers
 EXECUTE add_instance_teacher @tid, @iid;
 SELECT *
@@ -53,8 +53,8 @@ FROM VW_available_programmes;
 
 -- create a new student
 DECLARE @stud INT = NULL;
--- (name, birth_date, city, street, postal_code, OUT id)
-EXECUTE add_student 'Jan Otloukal', '2000-04-12', 'Prague', 'Slabá 123', '10900', @stud OUTPUT;
+-- (personal_number, name, birth_date, city, street, postal_code, OUT id)
+EXECUTE add_student '2000000000', 'Jan Otloukal', '2000-04-12', 'Prague', 'Slabá 123', '10900', @stud OUTPUT;
 -- see him among students
 SELECT *
 FROM VW_students;

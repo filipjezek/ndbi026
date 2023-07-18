@@ -139,6 +139,7 @@ AS
 GO
 
 CREATE PROCEDURE add_student
+  @personal_number CHAR(10),
   @name NVARCHAR(100),
   @birth_date DATE,
   @city NVARCHAR(100),
@@ -149,8 +150,8 @@ AS
   SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
   BEGIN TRANSACTION;
     BEGIN TRY
-      INSERT INTO people (name, birth_date, city, street, postal_code)
-        VALUES (@name, @birth_date, @city, @street, @postal_code);
+      INSERT INTO people (personal_number, name, birth_date, city, street, postal_code)
+        VALUES (@personal_number, @name, @birth_date, @city, @street, @postal_code);
       
       SELECT @id_student = SCOPE_IDENTITY();
       INSERT INTO students (id) VALUES (@id_student);
@@ -164,6 +165,7 @@ AS
 GO
 
 CREATE PROCEDURE add_teacher
+  @personal_number CHAR(10),
   @salary INT,
   @name NVARCHAR(100),
   @birth_date DATE,
@@ -175,8 +177,8 @@ AS
   SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
   BEGIN TRANSACTION;
     BEGIN TRY
-      INSERT INTO people (name, birth_date, city, street, postal_code)
-        VALUES (@name, @birth_date, @city, @street, @postal_code);
+      INSERT INTO people (personal_number, name, birth_date, city, street, postal_code)
+        VALUES (@personal_number, @name, @birth_date, @city, @street, @postal_code);
       
       SELECT @id_teacher = SCOPE_IDENTITY();
       INSERT INTO teachers (id, salary) VALUES (@id_teacher, @salary);
@@ -193,6 +195,7 @@ CREATE PROCEDURE create_subject_instance (
   @id_teacher INT,
   @id_subject INT,
   @capacity INT,
+  @code CHAR(6),
   @id_instance INT OUT
 )
 AS
@@ -203,8 +206,8 @@ AS
         THROW 60010, 'Teacher does not exist', 0;
       IF (NOT EXISTS(SELECT * FROM subjects WHERE id = @id_subject))
         THROW 60011, 'Subject does not exist', 0;
-      INSERT INTO subject_instances (year, capacity, instanceof)
-        VALUES (YEAR(GETDATE()), @capacity, @id_subject);
+      INSERT INTO subject_instances (year, capacity, instanceof, code)
+        VALUES (YEAR(GETDATE()), @capacity, @id_subject, @code);
 
       SELECT @id_instance = SCOPE_IDENTITY();
       INSERT INTO teachers_subjects (teacher, subject) VALUES (@id_teacher, @id_instance);
@@ -230,9 +233,10 @@ GO
 
 CREATE PROCEDURE create_programme
   @name NVARCHAR(100),
+  @code CHAR(4),
   @id_programme INT OUT
 AS
-  INSERT INTO programmes (name) VALUES (@name);
+  INSERT INTO programmes (name, code) VALUES (@name, @code);
   SELECT @id_programme = SCOPE_IDENTITY();
 GO
 
